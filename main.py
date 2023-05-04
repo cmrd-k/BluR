@@ -4,7 +4,7 @@ import numpy as np
 import time
 
 #defines source for video, 0 for webcam, replace 0 with filepath to use saved videos
-video = cv2.VideoCapture("./videos/video.mp4")
+video = cv2.VideoCapture("./input/video.mp4")
 height = int(video.get(4)) #gets video height
 width = int(video.get(3)) #gets video widht
 frameCount = int(video.get(7))
