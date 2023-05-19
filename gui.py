@@ -1,17 +1,12 @@
-# Python program to create
-# a file explorer in Tkinter
-
-# import all components
-# from the tkinter library
+import main
 from tkinter import *
-
-# import filedialog module
 from tkinter import filedialog
+from tkinter import ttk
+filepath = None
 
-
-# Function for opening the
-# file explorer window
 def browseFiles():
+    print("abc")
+    global filepath
     filename = filedialog.askopenfilename(initialdir="/",
                                           title="Select a File",
                                           filetypes=[("Supported Files",
@@ -19,46 +14,72 @@ def browseFiles():
                                                       "*.avi"),
                                                      ("experimental",
                                                       "*")])
-
+    filepath = filename
     # Change label contents
     label_file_explorer.configure(text="File Opened: " + filename)
 
 
+def trackProgress(percent):
+    print(f'Dies ist das Percent: {percent}')
+    print(f'Dies ist das pBar: {pBar["value"]}')
+    if pBar['value'] < 100:
+        #print("Hello")
+        pBar['value'] = float(percent)
+        pLabel['text'] = f'{percent}% processed'
+        window.update()
+
+
+def startBlur():
+    main.blurVideo("./input/video.mp4")
+
+
 # Create the root window
 window = Tk()
-
-# Set window title
 window.title('File Explorer')
-
-# Set window size
 window.geometry("500x500")
+window.config(background="#121212")
 
-# Set window background color
-window.config(background="white")
+window.option_add("*Background", "#1e1e1e")
 
-# Create a File Explorer label
 label_file_explorer = Label(window,
-                            text="File Explorer using Tkinter",
-                            width=100, height=4,
-                            fg="blue")
+                            text="Select a File to blur",
+                            width=50, height=4,
+                            fg="white")
 
-button_explore = Button(window,
+button_browse = Button(window,
                         text="Browse Files",
                         command=browseFiles)
+
+button_blur = Button(window,
+                     text="Blur Video",
+                     command=lambda: startBlur())
 
 button_exit = Button(window,
                      text="Exit",
                      command=exit)
 
-# Grid method is chosen for placing
-# the widgets at respective positions
-# in a table like structure by
-# specifying rows and columns
+pLabel = Label(window,
+                text="",
+                fg="white")
+pBar = ttk.Progressbar(
+    window,
+    orient='horizontal',
+    mode='determinate',
+    length=280
+)
+
 label_file_explorer.grid(column=0, row=1)
 
-button_explore.grid(column=0, row=2)
+button_browse.grid(column=0, row=2)
 
-button_exit.grid(column=0, row=3)
+button_blur.grid(column=0, row=3)
+
+button_exit.grid(column=0, row=4)
+
+pBar.grid(column=0, row=5, columnspan=2, padx=10, pady=20)
+
+pLabel.grid(column=1, row=5, columnspan=2, padx=10, pady=20)
+
 
 # Let the window wait for any events
 window.mainloop()
